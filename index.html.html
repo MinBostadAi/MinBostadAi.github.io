@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOSTAD.AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@300;400;500;700;900&family=Bricolage+Grotesque:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--black:#080808;--white:#f8f8f6;--gray-100:#e4e4e2;--gray-300:#c0c0bc;--gray-500:#888884;--gray-700:#444440;--gray-800:#222220;--gray-900:#141412;--green:#00e87a}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'Bricolage Grotesque',sans-serif;overflow-x:hidden}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;background:rgba(8,8,8,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07)}
+.nav-logo{font-family:'Epilogue',sans-serif;font-weight:900;font-size:1rem;letter-spacing:.1em;text-transform:uppercase}
+.nav-logo sup{font-size:.5rem;color:var(--gray-500);vertical-align:super;letter-spacing:.2em}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:var(--gray-500);transition:color .2s}
+.nav-links a:hover{color:var(--white)}
+.nav-right{display:flex;gap:.75rem;align-items:center}
+.nbtn{padding:.45rem 1.1rem;border-radius:3px;font-family:'Epilogue',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:all .2s;display:inline-block}
+.nbtn-ghost{background:none;border:1px solid rgba(255,255,255,.15);color:var(--white)}
+.nbtn-solid{background:var(--white);color:var(--black);border:none}
+.hero{min-height:100vh;padding:60px 0 0;display:grid;grid-template-columns:1fr 1fr;position:relative;overflow:hidden}
+.hero-l{display:flex;flex-direction:column;justify-content:center;padding:5rem 3rem 5rem 5rem}
+.h-eyebrow{display:inline-flex;align-items:center;gap:.6rem;font-size:.68rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gray-500);margin-bottom:2.5rem}
+.h-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.h-title{font-family:'Epilogue',sans-serif;font-weight:900;font-size:clamp(3rem,5.5vw,5.2rem);line-height:.95;letter-spacing:-.04em;text-transform:uppercase}
+.h-title .stroke{-webkit-text-stroke:1.5px rgba(255,255,255,.25);color:transparent;display:block}
+.h-title .solid{display:block}
+.h-sub{margin-top:2rem;max-width:400px;font-size:1rem;font-weight:300;line-height:1.75;color:var(--gray-500)}
+.h-sub strong{color:var(--white);font-weight:500}
+.h-bold{margin-top:1.2rem;font-size:1.15rem;font-weight:800;color:#fff;letter-spacing:-.01em}
+.h-btns{display:flex;gap:1rem;margin-top:3rem;flex-wrap:wrap}
+.btn-big{padding:.95rem 2.4rem;border-radius:4px;font-family:'Epilogue',sans-serif;font-weight:800;font-size:.82rem;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;transition:all .25s;text-decoration:none;display:inline-block}
+.btn-big-w{background:var(--white);color:var(--black);border:none}
+.btn-big-w:hover{transform:translateY(-2px);box-shadow:0 16px 48px rgba(255,255,255,.12)}
+.btn-big-o{background:none;color:var(--white);border:1px solid rgba(255,255,255,.2)}
+.h-proof{display:flex;gap:2.5rem;margin-top:4rem;padding-top:3rem;border-top:1px solid rgba(255,255,255,.07)}
+.h-num h3{font-family:'Epilogue',sans-serif;font-weight:900;font-size:2rem;letter-spacing:-.03em}
+.h-num p{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-500);margin-top:.2rem}
+.hero-r{background:var(--gray-900);position:relative;overflow:hidden}
+.h-cards{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:1px;padding:3rem}
+.h-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:1.2rem 1.5rem;display:flex;align-items:center;justify-content:space-between}
+.hc-img{width:48px;height:48px;border-radius:6px;flex-shrink:0;margin-right:.8rem;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.hc-left{display:flex;flex-direction:column;gap:.25rem}
+.hc-addr{font-size:.85rem;font-weight:600}
+.hc-meta{font-size:.72rem;color:var(--gray-500)}
+.hc-right{display:flex;flex-direction:column;align-items:flex-end;gap:.3rem}
+.hc-price{font-size:.9rem;font-weight:700}
+.hc-tag{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .6rem;border-radius:2px}
+.tag-match{background:rgba(0,232,122,.15);color:var(--green)}
+.tag-new{background:rgba(255,255,255,.1);color:var(--gray-300)}
+.tag-hot{background:rgba(255,255,255,.05);color:var(--gray-500)}
+.h-ai-pill{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);background:rgba(8,8,8,.9);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(12px);border-radius:100px;padding:.7rem 1.4rem;display:flex;align-items:center;gap:.8rem;max-width:90%}
+.ai-pill-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
+.ai-pill-text{font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-300)}
+.ticker-wrap{overflow:hidden;border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07);padding:.8rem 0;background:var(--gray-900)}
+.ticker{display:flex;animation:tick 30s linear infinite;white-space:nowrap}
+.ticker-item{display:inline-flex;align-items:center;gap:1.2rem;padding:0 2.5rem;font-size:.68rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--gray-700)}
+.ticker-item b{color:var(--gray-500);font-weight:600}
+.t-sep{width:3px;height:3px;border-radius:50%;background:var(--gray-700)}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.how{background:var(--gray-900);border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07);padding:8rem 5rem}
+.how-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:5rem}
+.s-tag{font-size:.68rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gray-500);margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem}
+.s-tag::before{content:'';width:20px;height:1px;background:var(--gray-700)}
+.s-title{font-family:'Epilogue',sans-serif;font-weight:900;font-size:clamp(2rem,4vw,3.5rem);line-height:1;letter-spacing:-.03em;text-transform:uppercase}
+.s-title .dim{color:var(--gray-700)}
+.how-sub{font-size:.85rem;color:var(--gray-500);max-width:280px;text-align:right;line-height:1.6}
+.how-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:rgba(255,255,255,.07);border-radius:8px;overflow:hidden}
+.how-step{background:var(--gray-900);padding:2.5rem 2rem;transition:background .3s}
+.how-step:hover{background:rgba(255,255,255,.03)}
+.hs-n{font-family:'Epilogue',sans-serif;font-weight:900;font-size:.7rem;letter-spacing:.15em;color:var(--gray-700);margin-bottom:2rem}
+.hs-icon{font-size:1.2rem;margin-bottom:1rem}
+.hs-title{font-size:.9rem;font-weight:700;margin-bottom:.5rem;line-height:1.3}
+.hs-desc{font-size:.78rem;color:var(--gray-500);line-height:1.7}
+.forwho{padding:8rem 5rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem}
+.fw-card{border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:3rem;position:relative;overflow:hidden;transition:border-color .3s,transform .3s}
+.fw-card:hover{border-color:rgba(255,255,255,.2);transform:translateY(-4px)}
+.fw-card.primary{background:var(--white);color:var(--black)}
+.fw-card.secondary{background:var(--gray-900)}
+.fw-tag{font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-bottom:1.5rem}
+.fw-card.primary .fw-tag{color:#555}
+.fw-card.secondary .fw-tag{color:var(--gray-500)}
+.fw-title{font-family:'Epilogue',sans-serif;font-weight:900;font-size:1.8rem;letter-spacing:-.02em;line-height:1.1;margin-bottom:1rem}
+.fw-desc{font-size:.9rem;line-height:1.7;margin-bottom:2rem}
+.fw-card.primary .fw-desc{color:#555}
+.fw-card.secondary .fw-desc{color:var(--gray-500)}
+.fw-price{font-family:'Epilogue',sans-serif;font-weight:900;font-size:2.5rem;letter-spacing:-.03em;margin-bottom:.3rem}
+.fw-price-sub{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-500)}
+.fw-list{list-style:none;margin:2rem 0;display:flex;flex-direction:column;gap:.8rem}
+.fw-list li{font-size:.85rem;display:flex;gap:.8rem;align-items:flex-start;line-height:1.4}
+.fw-list li::before{content:'→';flex-shrink:0;font-weight:700;color:#888}
+.fw-btn{display:inline-block;padding:.9rem 2rem;border-radius:4px;font-family:'Epilogue',sans-serif;font-weight:800;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .2s;text-decoration:none;border:none}
+.fw-card.primary .fw-btn{background:var(--black);color:var(--white)}
+.fw-card.secondary .fw-btn{background:var(--white);color:var(--black)}
+.fw-bg-num{position:absolute;bottom:-1rem;right:1rem;font-family:'Epilogue',sans-serif;font-weight:900;font-size:8rem;letter-spacing:-.05em;line-height:1;pointer-events:none}
+.fw-card.primary .fw-bg-num{color:rgba(0,0,0,.06)}
+.fw-card.secondary .fw-bg-num{color:rgba(255,255,255,.03)}
+.forms{background:var(--gray-900);border-top:1px solid rgba(255,255,255,.07);padding:8rem 5rem}
+.forms-head{margin-bottom:4rem}
+.forms-title{font-family:'Epilogue',sans-serif;font-weight:900;font-size:clamp(2rem,4vw,3.5rem);line-height:1;letter-spacing:-.03em;text-transform:uppercase}
+.forms-title .dim{color:var(--gray-700)}
+.ftabs{display:flex;gap:1px;background:rgba(255,255,255,.07);border-radius:4px;width:fit-content;margin-top:2rem;overflow:hidden}
+.ftab{background:none;border:none;cursor:pointer;padding:.75rem 2rem;font-family:'Epilogue',sans-serif;font-weight:700;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-500);transition:all .2s}
+.ftab.on{background:var(--white);color:var(--black)}
+.fpanel{display:none}
+.fpanel.on{display:block}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,.07);border-radius:8px;overflow:hidden;margin-top:2rem}
+.fld{background:var(--black);padding:1.4rem 1.8rem;transition:background .2s}
+.fld:focus-within{background:rgba(255,255,255,.04)}
+.fld.span2{grid-column:1/-1}
+.fld label{display:block;font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gray-500);margin-bottom:.5rem}
+.fld input,.fld select,.fld textarea{width:100%;background:none;border:none;outline:none;color:var(--white);font-family:'Bricolage Grotesque',sans-serif;font-size:.95rem;font-weight:400}
+.fld input::placeholder,.fld textarea::placeholder{color:var(--gray-700)}
+.fld select option{background:#111}
+.fld textarea{resize:none;height:80px;line-height:1.5}
+.form-foot{display:flex;align-items:center;gap:1.5rem;margin-top:1.5rem;flex-wrap:wrap}
+.f-submit{display:flex;align-items:center;gap:.8rem;background:var(--white);color:var(--black);border:none;padding:1rem 2.5rem;border-radius:4px;font-family:'Epilogue',sans-serif;font-weight:800;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .25s}
+.f-submit:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(255,255,255,.12)}
+.f-submit:disabled{opacity:.35;transform:none;box-shadow:none}
+.f-note{font-size:.75rem;color:var(--gray-500);line-height:1.6;max-width:280px}
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);padding:1rem 2rem;border-radius:8px;font-family:'Epilogue',sans-serif;font-weight:700;font-size:.85rem;letter-spacing:.05em;z-index:9999;transition:transform .4s cubic-bezier(.34,1.56,.64,1);white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.success{background:var(--green);color:var(--black)}
+.toast.error{background:#ff4444;color:var(--white)}
+.ai-result{margin-top:1.5rem;padding:2rem;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);display:none}
+.ai-result.show{display:block}
+.air-head{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid rgba(255,255,255,.06)}
+.air-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
+.air-label{font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gray-500)}
+.air-body{font-size:.9rem;line-height:1.85;color:var(--gray-300)}
+.air-body strong{color:var(--white);font-weight:600}
+.thinking{display:flex;align-items:center;gap:.8rem;color:var(--gray-500);font-size:.85rem}
+.dots span{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--white);margin:0 2px;animation:bnc 1.2s infinite}
+.dots span:nth-child(2){animation-delay:.15s}.dots span:nth-child(3){animation-delay:.3s}
+@keyframes bnc{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-7px)}}
+.img-upload-area{border:1px dashed rgba(255,255,255,.15);border-radius:8px;padding:2rem;text-align:center;cursor:pointer;transition:border-color .2s;position:relative;margin-top:.5rem}
+.img-upload-area:hover{border-color:rgba(255,255,255,.35)}
+.img-upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.img-upload-title{font-size:.85rem;font-weight:600;color:var(--white);margin-bottom:.3rem}
+.img-upload-tip{font-size:.72rem;color:var(--gray-500);line-height:1.5}
+.img-upload-tip strong{color:var(--gray-300)}
+.img-previews{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem}
+.img-preview{width:80px;height:80px;border-radius:4px;object-fit:cover;border:1px solid rgba(255,255,255,.1)}
+footer{border-top:1px solid rgba(255,255,255,.07);padding:4rem 5rem;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:4rem}
+.fl-brand p{font-size:.82rem;color:var(--gray-500);line-height:1.7;max-width:280px;margin-top:.5rem}
+.fl-brand small{display:block;margin-top:1rem;font-size:.7rem;color:var(--gray-700)}
+.fc h5{font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gray-600);margin-bottom:1.2rem}
+.fc ul{list-style:none;display:flex;flex-direction:column;gap:.65rem}
+.fc a{font-size:.83rem;color:var(--gray-500);text-decoration:none;transition:color .2s}
+.fc a:hover{color:var(--white)}
+.fbar{border-top:1px solid rgba(255,255,255,.05);padding:1.5rem 5rem;display:flex;justify-content:space-between;align-items:center;font-size:.72rem;color:var(--gray-700)}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.hero-r{display:none}.hero-l{padding:4rem 2rem}.how,.forwho,.forms{padding:5rem 2rem}.how-steps{grid-template-columns:1fr 1fr}.how-head{flex-direction:column;align-items:flex-start;gap:1rem}.how-sub{text-align:left}.forwho{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.fld.span2{grid-column:1}footer{grid-template-columns:1fr;padding:3rem 2rem}.fbar{padding:1.5rem 2rem;flex-direction:column;gap:.5rem;text-align:center}nav{padding:0 1.5rem}.nav-links{display:none}}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<nav>
+  <span class="nav-logo">BOSTAD<sup>AI</sup></span>
+  <ul class="nav-links">
+    <li><a href="#how">Hur det fungerar</a></li>
+    <li><a href="#forwho">För vem</a></li>
+    <li><a href="#forms">Kom igång</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="#forms" class="nbtn nbtn-ghost">Hyr ut gratis</a>
+    <a href="#forms" class="nbtn nbtn-solid">Hitta bostad</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-l">
+    <div class="h-eyebrow"><span class="h-dot"></span>AI-assistent för bostadsjakten</div>
+    <h1 class="h-title">
+      <span class="stroke">Sluta</span>
+      <span class="solid">Jaga.</span>
+      <span class="stroke">Låt AI</span>
+      <span class="solid">Hitta.</span>
+    </h1>
+    <p class="h-sub">Vi bevakar <strong>hela marknaden</strong> dygnet runt och skickar notis direkt när rätt bostad dyker upp. AI skriver ansökan åt dig.</p>
+    <p class="h-bold">Du slipper köa i flera år.</p>
+    <div class="h-btns">
+      <a href="#forms" class="btn-big btn-big-w">Starta AI-sökning →</a>
+      <a href="#forwho" class="btn-big btn-big-o">Hyr ut gratis</a>
+    </div>
+    <div class="h-proof">
+      <div class="h-num"><h3>450+</h3><p>Aktiva objekt</p></div>
+      <div class="h-num"><h3>48 tim</h3><p>Snitt till match</p></div>
+      <div class="h-num"><h3>99 kr</h3><p>Per månad</p></div>
+    </div>
+  </div>
+  <div class="hero-r">
+    <div class="h-cards">
+      <div class="h-card"><div class="hc-img">🏙</div><div class="hc-left"><div class="hc-addr">Södermalm, Stockholm</div><div class="hc-meta">2 rok · 52 kvm · 3:e vån</div></div><div class="hc-right"><div class="hc-price">11 500 kr</div><div class="hc-tag tag-match">97% match</div></div></div>
+      <div class="h-card"><div class="hc-img">🌿</div><div class="hc-left"><div class="hc-addr">Majorna, Göteborg</div><div class="hc-meta">1 rok · 38 kvm · Möblerat</div></div><div class="hc-right"><div class="hc-price">8 200 kr</div><div class="hc-tag tag-new">Ny idag</div></div></div>
+      <div class="h-card"><div class="hc-img">🏠</div><div class="hc-left"><div class="hc-addr">Möllevången, Malmö</div><div class="hc-meta">3 rok · 74 kvm · Balkong</div></div><div class="hc-right"><div class="hc-price">9 800 kr</div><div class="hc-tag tag-match">91% match</div></div></div>
+      <div class="h-card"><div class="hc-img">🏢</div><div class="hc-left"><div class="hc-addr">Kungsholmen, Stockholm</div><div class="hc-meta">2 rok · 61 kvm · Hiss</div></div><div class="hc-right"><div class="hc-price">13 200 kr</div><div class="hc-tag tag-hot">3 sökande</div></div></div>
+      <div class="h-card"><div class="hc-img">🌇</div><div class="hc-left"><div class="hc-addr">Linné, Göteborg</div><div class="hc-meta">1 rok · 31 kvm · Centralt</div></div><div class="hc-right"><div class="hc-price">7 500 kr</div><div class="hc-tag tag-new">Ny idag</div></div></div>
+    </div>
+    <div class="h-ai-pill"><div class="ai-pill-dot"></div><span class="ai-pill-text">AI söker aktivt · ca 450 annonser</span></div>
+  </div>
+</section>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <div class="ticker-item"><b>Stockholm</b><div class="t-sep"></div></div><div class="ticker-item"><b>Göteborg</b><div class="t-sep"></div></div><div class="ticker-item"><b>Malmö</b><div class="t-sep"></div></div><div class="ticker-item"><b>Uppsala</b><div class="t-sep"></div></div><div class="ticker-item"><b>Linköping</b><div class="t-sep"></div></div><div class="ticker-item"><b>Örebro</b><div class="t-sep"></div></div><div class="ticker-item"><b>Västerås</b><div class="t-sep"></div></div><div class="ticker-item"><b>Helsingborg</b><div class="t-sep"></div></div><div class="ticker-item"><b>Norrköping</b><div class="t-sep"></div></div><div class="ticker-item"><b>Jönköping</b><div class="t-sep"></div></div><div class="ticker-item"><b>Stockholm</b><div class="t-sep"></div></div><div class="ticker-item"><b>Göteborg</b><div class="t-sep"></div></div><div class="ticker-item"><b>Malmö</b><div class="t-sep"></div></div><div class="ticker-item"><b>Uppsala</b><div class="t-sep"></div></div><div class="ticker-item"><b>Linköping</b><div class="t-sep"></div></div><div class="ticker-item"><b>Örebro</b><div class="t-sep"></div></div><div class="ticker-item"><b>Västerås</b><div class="t-sep"></div></div><div class="ticker-item"><b>Helsingborg</b><div class="t-sep"></div></div><div class="ticker-item"><b>Norrköping</b><div class="t-sep"></div></div><div class="ticker-item"><b>Jönköping</b><div class="t-sep"></div></div>
+  </div>
+</div>
+
+<section class="how" id="how">
+  <div class="how-head">
+    <div><div class="s-tag">Processen</div><h2 class="s-title">Från sökning<br><span class="dim">till kontrakt</span></h2></div>
+    <p class="how-sub">Fem steg. AI gör fyra av dem. Du gör ett — väljer din nya bostad.</p>
+  </div>
+  <div class="how-steps">
+    <div class="how-step"><div class="hs-n">STEG 01</div><div class="hs-icon">✦</div><div class="hs-title">Du berättar vad du söker</div><p class="hs-desc">Stad, budget, storlek, inflyttningsdatum. Tar 60 sekunder.</p></div>
+    <div class="how-step"><div class="hs-n">STEG 02</div><div class="hs-icon">◈</div><div class="hs-title">AI bevakar marknaden dygnet runt</div><p class="hs-desc">Alla annonser i realtid. Du missar aldrig ett objekt igen.</p></div>
+    <div class="how-step"><div class="hs-n">STEG 03</div><div class="hs-icon">⬡</div><div class="hs-title">Notis direkt vid match</div><p class="hs-desc">Så fort en ny bostad matchar din profil — ping. Inte nästa dag.</p></div>
+    <div class="how-step"><div class="hs-n">STEG 04</div><div class="hs-icon">◎</div><div class="hs-title">AI skriver ansökan åt dig</div><p class="hs-desc">En personlig ansökan baserad på din profil skickas automatiskt till fastighetsägaren.</p></div>
+    <div class="how-step"><div class="hs-n">STEG 05</div><div class="hs-icon">▣</div><div class="hs-title">Du väljer och skriver kontrakt</div><p class="hs-desc">Kontakta ägaren direkt. Digitalt kontrakt med e-signering.</p></div>
+  </div>
+</section>
+
+<section class="forwho" id="forwho">
+  <div class="fw-card primary">
+    <div class="fw-bg-num">H</div>
+    <div class="fw-tag">För hyresgäster</div>
+    <h3 class="fw-title">Du som letar bostad</h3>
+    <p class="fw-desc">Sluta lägga timmar på att söka bostäder manuellt. Låt AI göra jobbet åt dig — dygnet runt.</p>
+    <div class="fw-price">99 kr<span style="font-size:1rem;font-weight:400">/mån</span></div>
+    <div class="fw-price-sub">Avsluta när du hittat din bostad</div>
+    <ul class="fw-list">
+      <li>AI bevakar hela marknaden 24/7</li>
+      <li>Notis inom sekunder vid ny match</li>
+      <li>AI skriver personliga ansökningar åt dig</li>
+      <li>Direktkontakt med fastighetsägare</li>
+      <li>Villa, lägenhet, rum — allt på ett ställe</li>
+    </ul>
+    <a href="#forms" class="fw-btn">Starta sökning →</a>
+  </div>
+  <div class="fw-card secondary">
+    <div class="fw-bg-num">Ä</div>
+    <div class="fw-tag">För fastighetsägare</div>
+    <h3 class="fw-title">Du som hyr ut</h3>
+    <p class="fw-desc">Nå tusentals verifierade hyresgäster direkt. Inga bluffansökningar. Helt gratis att lista.</p>
+    <div class="fw-price">Gratis</div>
+    <div class="fw-price-sub">Att lista ditt objekt · alltid</div>
+    <ul class="fw-list">
+      <li>Gratis annonsering — för alltid</li>
+      <li>Nå aktiva betalande hyresgäster</li>
+      <li>AI-screening av sökande profiler</li>
+      <li>Villa, hus, lägenhet, rum — alla typer</li>
+      <li>Digitalt kontrakt ingår (valfritt)</li>
+    </ul>
+    <a href="#forms" class="fw-btn">Lista ditt objekt →</a>
+  </div>
+</section>
+
+<div class="forms" id="forms">
+  <div class="forms-head">
+    <div class="s-tag">Kom igång nu</div>
+    <h2 class="forms-title">Berätta vad<br><span class="dim">du behöver</span></h2>
+    <div class="ftabs">
+      <button class="ftab on" id="tab-tenant">🔍 Söker bostad</button>
+      <button class="ftab" id="tab-landlord">🏠 Hyr ut gratis</button>
+    </div>
+  </div>
+
+  <div class="fpanel on" id="fp-tenant">
+    <div class="form-grid">
+      <div class="fld"><label>Förnamn</label><input type="text" placeholder="Anna" id="t-name"></div>
+      <div class="fld"><label>E-post</label><input type="email" placeholder="anna@mail.com" id="t-email"></div>
+      <div class="fld"><label>Stad / Område</label><input type="text" placeholder="Stockholm, Södermalm" id="t-city"></div>
+      <div class="fld"><label>Max hyra / mån (kr)</label><input type="number" placeholder="12000" id="t-budget"></div>
+      <div class="fld"><label>Typ av bostad</label><select id="t-type"><option value="">Välj...</option><option>Lägenhet</option><option>Villa / hus</option><option>Rum</option><option>Stuga / fritidshus</option></select></div>
+      <div class="fld"><label>Antal rum</label><select id="t-rooms"><option value="">Välj...</option><option>1 rum</option><option>2 rum</option><option>3 rum</option><option>4+ rum</option></select></div>
+      <div class="fld"><label>Kontraktstyp</label><select id="t-contract"><option value="">Välj...</option><option>Förstahand</option><option>Andrahand</option><option>Möblerat / korttid</option></select></div>
+      <div class="fld"><label>Önskat inflyttningsdatum</label><input type="date" id="t-date"></div>
+      <div class="fld"><label>Husdjur</label><select id="t-pet"><option value="">Välj...</option><option>Nej</option><option>Hund</option><option>Katt</option><option>Annat</option></select></div>
+      <div class="fld"><label>Telefon (valfritt)</label><input type="tel" placeholder="070-000 00 00" id="t-phone"></div>
+      <div class="fld span2"><label>Övriga önskemål</label><textarea placeholder="T.ex. balkong, parkering, nära tunnelbana..." id="t-extra"></textarea></div>
+    </div>
+    <div class="form-foot">
+      <button class="f-submit" id="btn-tenant"><span>⬡</span> Starta AI-sökning</button>
+      <p class="f-note">99 kr/mån. Avsluta när du vill. Du kontaktar fastighetsägaren själv.</p>
+    </div>
+    <div class="ai-result" id="air-tenant">
+      <div class="air-head"><div class="air-dot"></div><span class="air-label">BOSTAD AI · Analyserar din profil</span></div>
+      <div class="air-body" id="air-tenant-body"></div>
+    </div>
+  </div>
+
+  <div class="fpanel" id="fp-landlord">
+    <div class="form-grid">
+      <div class="fld"><label>Ditt namn</label><input type="text" placeholder="Erik Svensson" id="l-name"></div>
+      <div class="fld"><label>E-post</label><input type="email" placeholder="erik@mail.com" id="l-email"></div>
+      <div class="fld span2"><label>Adress på objektet</label><input type="text" placeholder="Sveavägen 12, Stockholm" id="l-address"></div>
+      <div class="fld"><label>Typ av objekt</label><select id="l-type"><option value="">Välj...</option><option>Lägenhet</option><option>Villa / hus</option><option>Rum</option><option>Stuga / fritidshus</option></select></div>
+      <div class="fld"><label>Antal rum</label><select id="l-rooms"><option value="">Välj...</option><option>1 rum</option><option>2 rum</option><option>3 rum</option><option>4+ rum</option></select></div>
+      <div class="fld"><label>Hyra / mån (kr)</label><input type="number" placeholder="11500" id="l-rent"></div>
+      <div class="fld"><label>Storlek (kvm)</label><input type="number" placeholder="55" id="l-size"></div>
+      <div class="fld"><label>Tillgänglig från</label><input type="date" id="l-date"></div>
+      <div class="fld"><label>Husdjur tillåtet</label><select id="l-pet"><option value="">Välj...</option><option>Nej</option><option>Ja</option><option>Diskuterbart</option></select></div>
+      <div class="fld span2"><label>Beskriv objektet</label><textarea placeholder="Ljus 2:a med balkong, nyrenoverat kök..." id="l-desc"></textarea></div>
+      <div class="fld span2"><label>Krav på hyresgäst (valfritt)</label><textarea placeholder="T.ex. fast anställning, ej rökare..." id="l-req"></textarea></div>
+      <div class="fld span2">
+        <label>Bilder på objektet</label>
+        <div class="img-upload-area">
+          <input type="file" id="l-images" accept="image/*" multiple>
+          <div class="img-upload-title">📷 Klicka för att ladda upp bilder</div>
+          <div class="img-upload-tip"><strong>Tips:</strong> Fotografera i dagsljus. Visa kök, vardagsrum och sovrum. Bra bilder ger fler seriösa sökande.</div>
+        </div>
+        <div class="img-previews" id="img-previews"></div>
+      </div>
+    </div>
+    <div class="form-foot">
+      <button class="f-submit" id="btn-landlord"><span>⬡</span> Publicera gratis</button>
+      <p class="f-note">Helt gratis för fastighetsägare. Du kontaktar sökande direkt.</p>
+    </div>
+    <div class="ai-result" id="air-landlord">
+      <div class="air-head"><div class="air-dot"></div><span class="air-label">BOSTAD AI · Analyserar ditt objekt</span></div>
+      <div class="air-body" id="air-landlord-body"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="fl-brand">
+    <span class="nav-logo">BOSTAD<sup style="font-size:.45rem;color:var(--gray-600);vertical-align:super;letter-spacing:.2em">AI</sup></span>
+    <p>Ett AI-drivet sökverktyg som hjälper hyresgäster hitta bostäder och fastighetsägare nå rätt sökande. Vi förmedlar inte bostäder — vi ger dig verktygen att hitta din nästa bostad själv.</p>
+    <small>© 2025 BOSTAD AB · Stockholm</small>
+  </div>
+  <div class="fc">
+    <h5>Plattform</h5>
+    <ul><li><a href="#forms">Hitta bostad</a></li><li><a href="#forms">Hyr ut gratis</a></li><li><a href="#forwho">Priser</a></li></ul>
+  </div>
+  <div class="fc">
+    <h5>Juridik och Support</h5>
+    <ul><li><a href="#">Integritetspolicy</a></li><li><a href="#">Användarvillkor</a></li><li><a href="#">GDPR</a></li><li><a href="/cdn-cgi/l/email-protection#f49c919eb4969b87809590da959d"><span class="__cf_email__" data-cfemail="d0b8b5ba90b2bfa3a4b1b4feb1b9">[email&#160;protected]</span></a></li></ul>
+  </div>
+</footer>
+<div class="fbar">
+  <span>BOSTAD.AI är ett sökverktyg, inte en mäklartjänst. Hyresgäst och ägare kontaktar varandra direkt.</span>
+  <span>Swish · Stripe · Klarna</span>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript">
+var SURL = 'https://nsulhswsjdigjhrpaodd.supabase.co';
+var SKEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdWxoc3dzamRpZ2pocnBhb2RkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwMjEzMzAsImV4cCI6MjA4OTU5NzMzMH0.-6D0McFp4ytog2Ql6DS5njyF01TkLXqk5rIQM7p9YYo';
+
+function showToast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (type || 'success');
+  setTimeout(function(){ t.classList.add('show'); }, 10);
+  setTimeout(function(){ t.classList.remove('show'); }, 4000);
+}
+
+function fmt(t) {
+  return t.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>');
+}
+
+async function dbInsert(table, data) {
+  var res = await fetch(SURL + '/rest/v1/' + table, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SKEY,
+      'Authorization': 'Bearer ' + SKEY,
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify(data)
+  });
+  if (!res.ok) {
+    var errText = await res.text();
+    console.error('Supabase fel:', errText);
+    throw new Error(errText);
+  }
+  return true;
+}
+
+async function callClaude(prompt) {
+  var r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, messages: [{ role: 'user', content: prompt }] })
+  });
+  var d = await r.json();
+  return d.content.map(function(i){ return i.text || ''; }).join('');
+}
+
+function swTab(tabId) {
+  document.querySelectorAll('.ftab').forEach(function(b){ b.classList.remove('on'); });
+  document.querySelectorAll('.fpanel').forEach(function(p){ p.classList.remove('on'); });
+  document.getElementById('tab-' + tabId).classList.add('on');
+  document.getElementById('fp-' + tabId).classList.add('on');
+}
+
+document.getElementById('tab-tenant').addEventListener('click', function(){ swTab('tenant'); });
+document.getElementById('tab-landlord').addEventListener('click', function(){ swTab('landlord'); });
+
+document.getElementById('l-images').addEventListener('change', function() {
+  var container = document.getElementById('img-previews');
+  container.innerHTML = '';
+  var files = Array.from(this.files).slice(0, 6);
+  files.forEach(function(file) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var img = document.createElement('img');
+      img.src = e.target.result;
+      img.className = 'img-preview';
+      container.appendChild(img);
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+document.getElementById('btn-tenant').addEventListener('click', async function() {
+  var name = document.getElementById('t-name').value;
+  var email = document.getElementById('t-email').value;
+  var city = document.getElementById('t-city').value;
+  var budget = parseInt(document.getElementById('t-budget').value) || null;
+  var type = document.getElementById('t-type').value;
+  var rooms = document.getElementById('t-rooms').value;
+  var contract = document.getElementById('t-contract').value;
+  var move_date = document.getElementById('t-date').value || null;
+  var pet = document.getElementById('t-pet').value;
+  var extra = document.getElementById('t-extra').value;
+
+  if (!name || !email || !city) { showToast('Fyll i namn, e-post och stad!', 'error'); return; }
+
+  var btn = document.getElementById('btn-tenant');
+  var box = document.getElementById('air-tenant');
+  var body = document.getElementById('air-tenant-body');
+  btn.disabled = true;
+
+  try {
+    await dbInsert('tenants', { name: name, email: email, city: city, budget: budget, rooms: (type ? type + ' · ' : '') + rooms, contract: contract, move_date: move_date || undefined, pet: pet, extra: extra });
+    showToast('Registrering sparad!', 'success');
+  } catch(e) {
+    showToast('Något gick fel — försök igen!', 'error');
+    btn.disabled = false;
+    return;
+  }
+
+  box.classList.add('show');
+  body.innerHTML = '<div class="thinking">AI analyserar <div class="dots"><span></span><span></span><span></span></div></div>';
+
+  try {
+    var text = await callClaude('Du är BOSTAD AI. Hyresgäst: ' + name + ', ' + city + ', budget ' + budget + ' kr, ' + type + ', ' + rooms + ', ' + contract + '. Skriv kort professionellt svar på svenska max 150 ord. Bekräfta registrering, ge 2 tips för ' + city + ', berätta nästa steg. Använd **fetstil**.');
+    body.innerHTML = fmt(text);
+  } catch(e) {
+    body.innerHTML = '<strong>Sökning registrerad!</strong><br><br>AI bevakar nu hela marknaden. Du notifieras direkt när en bostad matchar din profil.';
+  }
+  btn.disabled = false;
+});
+
+document.getElementById('btn-landlord').addEventListener('click', async function() {
+  var name = document.getElementById('l-name').value;
+  var email = document.getElementById('l-email').value;
+  var address = document.getElementById('l-address').value;
+  var property_type = document.getElementById('l-type').value;
+  var rooms = document.getElementById('l-rooms').value;
+  var rent = parseInt(document.getElementById('l-rent').value) || null;
+  var size = parseInt(document.getElementById('l-size').value) || null;
+  var available_date = document.getElementById('l-date').value || null;
+  var pet_allowed = document.getElementById('l-pet').value;
+  var description = document.getElementById('l-desc').value;
+  var requirements = document.getElementById('l-req').value;
+
+  if (!name || !email || !address) { showToast('Fyll i namn, e-post och adress!', 'error'); return; }
+
+  var btn = document.getElementById('btn-landlord');
+  var box = document.getElementById('air-landlord');
+  var body = document.getElementById('air-landlord-body');
+  btn.disabled = true;
+
+  try {
+    await dbInsert('landlords', { name: name, email: email, address: address, property_type: property_type, rooms: rooms, rent: rent, size: size, available_date: available_date || undefined, pet_allowed: pet_allowed, description: description, requirements: requirements });
+    showToast('Objekt publicerat!', 'success');
+  } catch(e) {
+    showToast('Något gick fel — försök igen!', 'error');
+    btn.disabled = false;
+    return;
+  }
+
+  box.classList.add('show');
+  body.innerHTML = '<div class="thinking">AI analyserar <div class="dots"><span></span><span></span><span></span></div></div>';
+
+  try {
+    var text = await callClaude('Du är BOSTAD AI. Objekt: ' + address + ', ' + property_type + ', ' + rooms + ', ' + size + ' kvm, ' + rent + ' kr/mån. Skriv kort professionellt svar på svenska max 150 ord. Bekräfta publicering, ge marknadsanalys, berätta nästa steg. Använd **fetstil**.');
+    body.innerHTML = fm
